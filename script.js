@@ -25,7 +25,8 @@ function shuffle(array) {
 }
 newGameBtn.textContent= "Новая игра"
 newGameBtn.addEventListener("click", () => {
-document.location.reload();
+    startGame();
+
 })
 title.textContent = "Memory game";
 headers.classList.add("header");
@@ -49,6 +50,67 @@ pairsText.classList.add("stat-item");
 pairsText.textContent = "Пар: 0 / 8"; 
 
 statsContainer.append(movesText, pairsText);
+
+const hystmodal = document.createElement("div");
+hystmodal.classList.add("hystmodal");
+
+const hystmodalWindow = document.createElement("div");
+hystmodalWindow.classList.add("hystmodalWindow");
+
+const modalTitle = document.createElement("h2");
+modalTitle.textContent = "Победа! 🎉";
+
+const modalText = document.createElement("p");
+modalText.classList.add("modal-text");
+
+const modalButtonsContainer = document.createElement("div");
+modalButtonsContainer.classList.add("modal-buttons");
+
+const modalPlayAgainBtn = document.createElement("button");
+modalPlayAgainBtn.classList.add("modal-btn", "btn-restart");
+modalPlayAgainBtn.textContent = "Играть заново";
+
+const modalCloseBtn = document.createElement("button");
+modalCloseBtn.classList.add("modal-btn", "btn-close");
+modalCloseBtn.textContent = "Закрыть";
+
+function openModal() {
+    modalText.textContent = `Чтобы пройти игру тебе понадобилось: ${movesCount} ходов`;
+    hystmodal.classList.add("active"); 
+    document.body.style.overflow = "hidden"; 
+}
+
+function closeModal() {
+    hystmodal.classList.remove("active"); 
+    document.body.style.overflow = ""; 
+}
+
+modalPlayAgainBtn.addEventListener("click", () => {
+    closeModal(); 
+    startGame(); 
+});
+
+modalCloseBtn.addEventListener("click", () => {
+    closeModal(); 
+});
+
+hystmodal.addEventListener("click", (event) => {
+    if (event.target === hystmodal) {
+        closeModal();
+    }
+});
+
+window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && hystmodal.classList.contains("active")) {
+        closeModal();
+    }
+});
+
+// СБОРКА: Складываем всё в правильном порядке
+modalButtonsContainer.append(modalPlayAgainBtn, modalCloseBtn);
+hystmodalWindow.append(modalTitle, modalText, modalButtonsContainer);
+hystmodal.append(hystmodalWindow);
+
 
 headers.append(title, statsContainer, btn,newGameBtn);
 let movesCount = 0;
@@ -105,7 +167,7 @@ function createCard(imageName) {
             pairsText.textContent = `Пар: ${pairsCount} / ${TOTAL_PAIRS}`;
             if (pairsCount === TOTAL_PAIRS) {
                 setTimeout(() => {
-                    alert(`Поздравляем! Вы победили за ${movesCount} ходов!`);
+                      openModal() 
                 }, 500);
             }
              firstCard = null;
@@ -125,12 +187,15 @@ function createCard(imageName) {
                 isBoardLocked = false;
             }, 1000);
         }
+       
     });
     return cardDiv;
 }
 
 const mainContainer = document.getElementById("app");
-mainContainer.append(headers);
+mainContainer.append(headers,hystmodal);
+
+
 
 const gameGrid = document.createElement("div");
 gameGrid.classList.add("gameGrid");
@@ -143,12 +208,24 @@ function startGame() {
   secondCard = null;
   isBoardLocked = false;
 
+  movesCount = 0;
+  pairsCount = 0;
+
+  movesText.textContent = "Ходов: 0";
+  pairsText.textContent = `Пар: 0 / ${TOTAL_PAIRS}`;
   const shuffledImages = shuffle([...cardImages]);
 
   shuffledImages.forEach((imageName) => {
     const newCard = createCard(imageName); 
     gameGrid.append(newCard);
   });
+  
 }
 
 startGame();
+hystmodal.addEventListener("click", (event) => {
+
+    if (event.target === hystmodal) {
+        closeModal();
+    }
+});

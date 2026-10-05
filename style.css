@@ -102,3 +102,70 @@ h2{
     height: 130px;
     border-radius: 40px;
 }
+.hystmodal {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6); /* Затемнение фона */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Чтобы быть поверх игры */
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Белое окно по центру */
+.hystmodalWindow {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    
+    /* Эффект красивого всплытия */
+    transform: scale(0.85);
+    transition: transform 0.2s ease;
+}
+
+/* --- КЛЮЧЕВОЙ МОМЕНТ: Активация окна --- */
+/* Когда JS добавляет класс .active к главному контейнеру */
+.hystmodal.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Когда модалка активна, плавно увеличиваем белое окно */
+.hystmodal.active .hystmodalWindow {
+    transform: scale(1);
+}
+
+/* Стили для текста и кнопок внутри окна */
+.modal-text {
+    font-size: 1.2rem;
+    margin: 15px 0 25px 0;
+    color: #333;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-restart { background: #28a745; color: white; }
+.btn-close { background: #6c757d; color: white; }
