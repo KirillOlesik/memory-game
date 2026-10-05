@@ -1,4 +1,4 @@
-h2{
+h2 {
     margin: 0;
     padding: 0;
 }
@@ -6,19 +6,36 @@ h2{
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
+    background-color: burlywood;
     color: brown;
-    height: 120px;
+    height: 130px;
     width: 100%;
     
 }
 .topPlayers{
+    background-color:bisque ;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     display: flex;
-    height: 30px;
-    width: 200px;
+    height: 35px;
+    width: 150px;
+    font-size: 16px;
+    border-radius: 25px;
+}
+.newGameBtn{
+    background-color:bisque ;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 35px;
+    width: 150px;
+    font-size: 15px;
+    border-radius: 25px;
 }
 .playingCard{
     display: flex;
@@ -54,7 +71,7 @@ h2{
     transform: rotateY(180deg);
 }
 .cardFront {
-    background-color: #fff;
+    background-color: rgb(237, 207, 167);
     transform: rotateY(180deg);
     border-radius: 40px;
 }
@@ -85,6 +102,7 @@ h2{
     flex-direction: column;
        padding: 0;
     margin: 0;
+    background-color: bisque;
 }
 .gameGrid{
     display: flex;
@@ -110,15 +128,15 @@ h2{
     bottom: 0;
     right: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.6); /* Затемнение фона */
+    background: rgba(0, 0, 0, 0.6); 
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999; /* Чтобы быть поверх игры */
+    z-index: 999;
     transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-/* Белое окно по центру */
+
 .hystmodalWindow {
     background: #fff;
     padding: 30px;
@@ -127,25 +145,20 @@ h2{
     max-width: 90%;
     text-align: center;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    
-    /* Эффект красивого всплытия */
+
     transform: scale(0.85);
     transition: transform 0.2s ease;
 }
 
-/* --- КЛЮЧЕВОЙ МОМЕНТ: Активация окна --- */
-/* Когда JS добавляет класс .active к главному контейнеру */
 .hystmodal.active {
     visibility: visible;
     opacity: 1;
 }
 
-/* Когда модалка активна, плавно увеличиваем белое окно */
+
 .hystmodal.active .hystmodalWindow {
     transform: scale(1);
 }
-
-/* Стили для текста и кнопок внутри окна */
 .modal-text {
     font-size: 1.2rem;
     margin: 15px 0 25px 0;
@@ -167,5 +180,12 @@ h2{
     cursor: pointer;
 }
 
-.btn-restart { background: #28a745; color: white; }
+.btn-restart { background: burlywood; color: white; }
 .btn-close { background: #6c757d; color: white; }
+.asd{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
