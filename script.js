@@ -3,6 +3,7 @@ const title = document.createElement("h1");
 const btn = document.createElement("button");
 const btntxt = document.createElement("h2");
 const main = document.createElement("div");
+const newGameBtn = document.createElement("button")
 
 const cardImages = [
   'bowling', 'basket',
@@ -22,25 +23,41 @@ function shuffle(array) {
   }
   return array;
 }
-
+newGameBtn.textContent= "Новая игра"
+newGameBtn.addEventListener("click", () => {
+document.location.reload();
+})
 title.textContent = "Memory game";
 headers.classList.add("header");
 btntxt.textContent = "Top players";
 btn.classList.add("topPlayers");
 
-headers.append(title, btn);
 btn.append(btntxt);
-
-// --- ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ СОСТОЯНИЯ ИГРЫ ---
 let isBoardLocked = false;
 let firstCard = null;
 let secondCard = null;
 
+const statsContainer = document.createElement("div");
+statsContainer.classList.add("stats-container");
+
+const movesText = document.createElement("span");
+movesText.classList.add("stat-item");
+movesText.textContent = "Ходов: 0";
+
+const pairsText = document.createElement("span");
+pairsText.classList.add("stat-item");
+pairsText.textContent = "Пар: 0 / 8"; 
+
+statsContainer.append(movesText, pairsText);
+
+headers.append(title, statsContainer, btn,newGameBtn);
+let movesCount = 0;
+let pairsCount = 0;
+const TOTAL_PAIRS = 8; 
+
 function createCard(imageName) {
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("playingCard");
-    
-    // ИСПРАВЛЕНИЕ: Обязательно сохраняем имя картинки в dataset, чтобы работал if ниже!
     cardDiv.dataset.imageName = imageName;
     
     const cardInner = document.createElement("div");
@@ -66,35 +83,43 @@ function createCard(imageName) {
     cardDiv.append(cardInner);
 
     cardDiv.addEventListener("click", () => {
-        // Игнорируем клик, если доска заблокирована или карта уже открыта
         if (isBoardLocked) return;
         if (cardDiv.classList.contains("flipped")) return;
 
         cardDiv.classList.add("flipped");
-
-        // Если это первая открытая карта
         if (!firstCard) {
             firstCard = cardDiv;
             return;
         }
-
-        // Если это вторая открытая карта
         secondCard = cardDiv;
-        isBoardLocked = true; // Блокируем доску на время анимации проверки
+        isBoardLocked = true;
 
-        // Проверяем на совпадение по сохраненному dataset
+         movesCount++;
+        movesText.textContent = `Ходов: ${movesCount}`;
+
         if (firstCard.dataset.imageName === secondCard.dataset.imageName) {
-            // Карточки совпали! Оставляем открытыми
-            firstCard = null;
+          setTimeout(() => {
+ firstCard.classList.add("open");
+            secondCard.classList.add("open"); 
+             pairsCount++;
+            pairsText.textContent = `Пар: ${pairsCount} / ${TOTAL_PAIRS}`;
+            if (pairsCount === TOTAL_PAIRS) {
+                setTimeout(() => {
+                    alert(`Поздравляем! Вы победили за ${movesCount} ходов!`);
+                }, 500);
+            }
+             firstCard = null;
             secondCard = null;
             isBoardLocked = false;
+          }, 400);
+          
+         
+           
         } else {
-            // Карточки не совпали. Ждем 1 секунду и закрываем
             setTimeout(() => {
                 firstCard.classList.remove("flipped");
                 secondCard.classList.remove("flipped");
                 
-                // Сбрасываем переменные для следующих ходов
                 firstCard = null;
                 secondCard = null;
                 isBoardLocked = false;
@@ -112,23 +137,18 @@ gameGrid.classList.add("gameGrid");
 mainContainer.append(gameGrid);
 
 function startGame() {
-  // Очищаем сетку от старых карт
   gameGrid.replaceChildren(); 
 
-  // Сбрасываем состояние карт и блокировок при перезапуске
   firstCard = null;
   secondCard = null;
   isBoardLocked = false;
 
-  // Перемешиваем копию массива картинок
   const shuffledImages = shuffle([...cardImages]);
 
-  // Генерируем новые карты
   shuffledImages.forEach((imageName) => {
     const newCard = createCard(imageName); 
     gameGrid.append(newCard);
   });
 }
 
-// Запускаем игру
 startGame();
